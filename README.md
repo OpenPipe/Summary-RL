@@ -40,7 +40,7 @@ In a new `.env` file at the root of the repository, set the following optional e
 
 - `WANDB_API_KEY` - Enables metric logging to Weights & Biases.
 - `OPENPIPE_API_KEY` - Enables chat completion logging to OpenPipe.
-- `OPENAI_API_KEY` - Will be necessary for later comparison benchmarks, but not used for training.
+- `OPENROUTER_API_KEY` - Training Judge and comparison benchmark
 
 To enable model and logging backup to S3, you'll also need to provide AWS credentials. These are necessary for generating the benchmarks found in the `benchmarks` directory, but not for training itself. If you don't already have AWS credentials with create/read/write permissions for s3 buckets, follow the instructions [here](CONFIGURING_AWS.md).
 
