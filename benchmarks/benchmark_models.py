@@ -1,7 +1,7 @@
 import os
 import asyncio
 import art
-from art.skypilot.backend import SkyPilotBackend
+from art.serverless.backend import ServerlessBackend
 from summarizer.get_judge_completion import clear_judge_cache
 from summarizer.load_documents import load_documents
 from summarizer.rollout import rollout, SummarizerScenario
@@ -58,9 +58,7 @@ async def benchmark_model(model: art.Model) -> None:
 
 async def main():
     # clear_judge_cache()
-    backend = await SkyPilotBackend.initialize_cluster(
-        cluster_name=CLUSTER_NAME, env_path=".env", gpu="H100"
-    )
+    backend = ServerlessBackend()
     models = [
         gpt_4o,
         gpt_4_1,

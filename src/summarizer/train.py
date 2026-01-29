@@ -2,33 +2,29 @@ import art
 import asyncio
 from dotenv import load_dotenv
 import random
-from art.skypilot import SkyPilotBackend
+from art.serverless.backend import ServerlessBackend
+import weave
 
 from summarizer import rollout, SummarizerScenario
 from summarizer.load_documents import load_documents
 
 load_dotenv()
 
-AGENT_NAME = "agent-002"
+AGENT_NAME = "agent-000"
 PROJECT_NAME = "summarize"
-CLUSTER_NAME = "summarize-art"
 
 
 async def main():
+    weave.init(project_name=PROJECT_NAME)
     val_documents, train_documents = load_documents()
 
-    backend = await SkyPilotBackend.initialize_cluster(
-        cluster_name=CLUSTER_NAME,
-        env_path=".env",
-        gpu="H100",
-    )
+    backend = ServerlessBackend()
 
     model = art.TrainableModel(
         name=AGENT_NAME,
         project=PROJECT_NAME,
-        base_model="Qwen/Qwen2.5-3B-Instruct",
+        base_model="OpenPipe/Qwen3-14B-Instruct",
     )
-    await backend._experimental_pull_from_s3(model)
     await model.register(backend)
 
     batch_size = 10  # Process this many documents per batch
@@ -91,7 +87,6 @@ async def main():
                 train_groups,
                 config=art.TrainConfig(learning_rate=5e-5),
             )
-            await backend._experimental_push_to_s3(model)
 
 
 if __name__ == "__main__":

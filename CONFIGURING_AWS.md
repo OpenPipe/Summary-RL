@@ -30,7 +30,7 @@ Important: Save these somewhere secure—this is the only time you’ll be able 
 
 ### 5. Set Environment Variables
 
-Return to the [README](https://github.com/openpipe/tic-tac-toe-agent) instructions and set the following environment variables in your `.env` file:
+Return to the [README](https://github.com/openpipe/summary-rl) instructions and set the following environment variables in your `.env` file:
 
 ```bash
 AWS_ACCESS_KEY_ID=<your-access-key-id>

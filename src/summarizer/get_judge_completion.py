@@ -24,7 +24,7 @@ async def get_judge_completion(
             async with semaphore:
                 completion = await client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
-                    model="google/gemini-2.5-flash-preview",
+                    model="google/gemini-3-flash-preview",
                     temperature=temperature,
                     max_tokens=max_tokens,
                 )

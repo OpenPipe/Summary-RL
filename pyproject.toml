@@ -4,10 +4,7 @@ version = "0.1.0"
 description = "Document Summarizer Agent"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-    "openpipe>=4.50.0",
-    "openpipe-art>=0.3.6",
-]
+dependencies = ["openpipe-art>=0.5.7"]
 
 [build-system]
 requires = ["hatchling"]

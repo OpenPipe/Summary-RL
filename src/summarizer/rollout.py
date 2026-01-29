@@ -4,15 +4,10 @@ import random
 import regex
 from pydantic import BaseModel
 import time
-import os
+import weave
 
 from summarizer.get_judge_completion import get_judge_completion
 from summarizer.load_documents import Document
-
-from openpipe.client import OpenPipe
-
-
-op_client = OpenPipe()
 
 
 class SummarizerScenario(BaseModel):
@@ -21,6 +16,7 @@ class SummarizerScenario(BaseModel):
     use_full: bool = False
 
 
+@weave.op()
 @art.retry(exceptions=(openai.LengthFinishReasonError,))
 async def rollout(model: art.Model, scenario: SummarizerScenario) -> art.Trajectory:
     client = model.openai_client()
@@ -115,29 +111,5 @@ Generate a summary that conveys all relevant information in a concise manner."""
     trajectory.metrics["word_count"] = len(summary.split())
     trajectory.metrics["len"] = len(summary)
     trajectory.reward = total_score
-
-    if os.getenv("OPENPIPE_API_KEY"):
-        try:
-            op_client.report(
-                requested_at=requested_at,
-                received_at=int(time.time() * 1000),
-                req_payload={
-                    "model": model.name,
-                    "messages": messages,
-                    "metadata": {
-                        "project": "summarize",
-                        "step": scenario.step,
-                        "percent": trajectory.metrics["percent"],
-                        "percent_full": trajectory.metrics["percent_full"],
-                        "percent_diff": trajectory.metrics["percent_diff"],
-                        "word_count": trajectory.metrics["word_count"],
-                        "len": trajectory.metrics["len"],
-                    },
-                },
-                resp_payload=completion,
-                status_code=200,
-            )
-        except Exception as e:
-            print(f"Error reporting to OpenPipe: {e}")
 
     return trajectory
